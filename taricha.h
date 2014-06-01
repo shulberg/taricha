@@ -18,7 +18,7 @@ void taricha_append(const uint8_t *in, size_t length,
 void taricha_finalize(uint8_t *out, size_t length,
 		struct taricha_state *s);
 
-void taricha_full(uint8_t *in, uint8_t *out,
+void taricha_full(const uint8_t *in, uint8_t *out,
 		size_t in_length, size_t out_length);
 
 #endif

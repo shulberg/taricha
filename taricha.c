@@ -200,7 +200,7 @@ void taricha_finalize(uint8_t *out, size_t length,
 	memcpy(out, s->s, length);
 }
 
-void taricha_full(uint8_t *in, uint8_t *out,
+void taricha_full(const uint8_t *in, uint8_t *out,
 		size_t in_length, size_t out_length)
 {
 	struct taricha_state s = taricha_init();
