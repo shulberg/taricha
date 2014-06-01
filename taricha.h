@@ -1,5 +1,5 @@
-#ifndef _taricha_H
-#define _taricha_H
+#ifndef _TARICHA_H
+#define _TARICHA_H
 
 #include <stdint.h>
 
