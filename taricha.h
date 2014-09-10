@@ -2,6 +2,7 @@
 #define _TARICHA_H
 
 #include <stdint.h>
+#include <stdlib.h>
 
 struct taricha512_state
 {
@@ -10,7 +11,7 @@ struct taricha512_state
 	uint64_t s[8];
 };
 
-struct taricha512_state taricha_init();
+struct taricha512_state taricha512_init();
 
 void taricha512_append(const uint8_t *in, size_t length,
 		struct taricha512_state *s);
