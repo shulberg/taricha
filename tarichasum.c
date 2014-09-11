@@ -243,21 +243,20 @@ static int parse_checksum_line(char *line, char **filename, uint8_t *hash,
 	{
 		regfree(&checksum_expression);
 
-		sprintf(pattern, "^%s\\s+\\((.+)\\)\\s+=\\s+[0-9A-Fa-f]{%zu}$",
+		sprintf(pattern, "^%s\\s+\\((.+)\\)\\s+=\\s+([0-9A-Fa-f]{%zu})$",
 				hash_name, hash_len*2);
 
-		regcomp(&checksum_expression, pattern, 0);
+		regcomp(&checksum_expression, pattern, REG_EXTENDED);
 
 		if (regexec(&checksum_expression, line, 4, matches, 0) == 0)
 		{
 			//Tag format
 			parse_hash(line+matches[2].rm_so, hash);
 
-			matches[1].rm_eo = '\0';
+			line[matches[1].rm_eo] = '\0';
 			*filename = line + matches[1].rm_so;
 
 			*_binary = binary;
-
 		}
 		else
 		{
