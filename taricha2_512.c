@@ -114,7 +114,7 @@ static inline void taricha2_512_block(const uint8_t in[128],
 
 	for (i=0; i<8; i++)
 	{
-		s->s[i] ^= x[i+8];
+		s->s[i] ^= x[7-i] + x[i+8];
 	}
 }
 
@@ -209,7 +209,7 @@ uint64_t taricha2_512_64_finalize(struct taricha2_512_state *s)
 
 	taricha2_512_transform(x);
 	
-	return s->s[0] ^ x[8];
+	return s->s[0] ^ (x[7] + x[8]);
 }
 
 uint64_t taricha2_512_64_full(const uint8_t *in, size_t in_length)
