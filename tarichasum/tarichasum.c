@@ -3,8 +3,8 @@
 #include <regex.h>
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <inttypes.h>
-#include "taricha.h"
 
 #ifdef _WIN32
 #include <io.h>

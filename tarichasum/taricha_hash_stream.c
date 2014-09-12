@@ -1,6 +1,6 @@
 #include <inttypes.h>
 #include "taricha_hash_stream.h"
-#include "taricha.h"
+#include "../lib/taricha.h"
 
 #define BUFFER_SIZE 8192
 
