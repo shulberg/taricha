@@ -8,6 +8,8 @@
 
 #ifdef _WIN32
 #include <io.h>
+#include <fcntl.h>
+#define S_ISDIR(x) ((x & S_IFDIR) == S_IFDIR)
 #endif
 
 const char *HELP_TEXT =
@@ -366,7 +368,7 @@ static void process_files(int argc, char **argv,
 				if (binary)
 				{
 #if defined(_WIN32)
-					if(_setmode(stdin, O_BINARY) == -1)
+					if(_setmode(stdin, _O_BINARY) == -1)
 					{
 						perror("Could not set stdin to binary mode");
 						exit(1);
