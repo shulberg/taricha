@@ -6,7 +6,7 @@ add_executable(taricha2_512sum taricha2_512sum.c)
 if (WIN32 AND NOT CIGWIN)
 
 set(REGEX_INCLUDE_DIRECTORY F:/pcre/include CACHE PATH "Path containing regex.h")
-set(REGEX_LIB F:/pcre/lib/pcreposix.lib CACHE STRING "Regex library")
+set(REGEX_LIB F:/pcre/lib/pcreposix.lib CACHE FILEPATH "Regex library")
 
 include_directories(${REGEX_INCLUDE_DIRECTORY})
 target_link_libraries(tarichasum ${REGEX_LIB})
