@@ -3,7 +3,7 @@ add_library(tarichasum STATIC taricha_hash_stream.c tarichasum.c taricha_hash_st
 add_executable(taricha512sum taricha512sum.c)
 add_executable(taricha2_512sum taricha2_512sum.c)
 
-if (WIN32 AND NOT CIGWIN)
+if (WIN32 AND NOT CYGWIN)
 
 set(REGEX_INCLUDE_DIRECTORY F:/pcre/include CACHE PATH "Path containing regex.h")
 set(REGEX_LIB F:/pcre/lib/pcreposix.lib CACHE FILEPATH "Regex library")
@@ -11,7 +11,7 @@ set(REGEX_LIB F:/pcre/lib/pcreposix.lib CACHE FILEPATH "Regex library")
 include_directories(${REGEX_INCLUDE_DIRECTORY})
 target_link_libraries(tarichasum ${REGEX_LIB})
 
-endif (WIN32 AND NOT CIGWIN)
+endif (WIN32 AND NOT CYGWIN)
 
 target_link_libraries(tarichasum taricha)
 
