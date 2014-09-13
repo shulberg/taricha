@@ -3,4 +3,4 @@ add_executable(taricha2_512sum taricha2_512sum.c taricha_hash_stream.c tarichasu
 target_link_libraries(taricha512sum taricha)
 target_link_libraries(taricha2_512sum taricha)
 
-install(TARGETS taricha512sum taricha2_512sum DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(TARGETS taricha512sum taricha2_512sum DESTINATION "${CMAKE_INSTALL_PREFIX}/bin")
