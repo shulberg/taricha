@@ -108,6 +108,12 @@ int tarichasum_main(int argc, char **argv,
 	}
 	int file_count = argc - optstate.optpos;
 	char **files = argv + optstate.optpos;
+	if (file_count == 0)
+	{
+		const char *stdin_key = "-";
+		files = &stdin_key;
+		file_count = 1;
+	}
 	if (settings.check)
 	{
 		return process_files(files, file_count, check_files, &settings);

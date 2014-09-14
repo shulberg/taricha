@@ -8,6 +8,15 @@
 #include <inttypes.h>
 #include "processing.h"
 
+#ifdef _WIN32
+	#include <io.h>
+	#include <fcntl.h>
+
+	#ifndef S_ISDIR
+		#define S_ISDIR(x) ((x & S_IFDIR) == S_IFDIR)
+	#endif
+#endif
+
 static size_t read_line(FILE * stream, char **line_out)
 {
 	size_t len = 128; //initial allocation will be double this value
@@ -233,77 +242,70 @@ int process_files(char **files, int file_count,
 		struct program_settings *settings)
 {
 	int status_code = 0;
-	if (file_count == 0)
+	int i;
+	for (i=0; i<file_count; i++)
 	{
-		status_code |= file_processor(stdin, "-", settings);
-	}
-	else
-	{
-		int i;
-		for (i=0; i<file_count; i++)
+		struct stat file_stat;
+		char *filename = files[i];
+		if (strcmp(filename,"-") == 0)
 		{
-			struct stat file_stat;
-			char *filename = files[i];
-			if (strcmp(filename,"-") == 0)
-			{
 
+			if (settings->binary)
+			{
+#if defined(_WIN32)
+				if(_setmode(_fileno(stdin), _O_BINARY) == -1)
+				{
+					perror("Could not set stdin to binary mode");
+					exit(1);
+				}
+#elif defined(REOPEN_STDIN)
+				if (freopen(NULL, "rb", stdin) == NULL)
+				{
+					perror("Could not reopen stdin in binary mode");
+					exit(1);
+				}
+#endif
+			}
+
+			status_code |= file_processor(stdin, "-", settings);
+		}
+		else if (stat(filename, &file_stat) == 0)
+		{
+			if (!S_ISDIR(file_stat.st_mode))
+			{
+				FILE *f;
 				if (settings->binary)
 				{
-#if defined(_WIN32)
-					if(_setmode(_fileno(stdin), _O_BINARY) == -1)
-					{
-						perror("Could not set stdin to binary mode");
-						exit(1);
-					}
-#elif defined(REOPEN_STDIN)
-					if (freopen(NULL, "rb", stdin) == NULL)
-					{
-						perror("Could not reopen stdin in binary mode");
-						exit(1);
-					}
-#endif
-				}
-
-				status_code |= file_processor(stdin, "-", settings);
-			}
-			else if (stat(filename, &file_stat) == 0)
-			{
-				if (!S_ISDIR(file_stat.st_mode))
-				{
-					FILE *f;
-					if (settings->binary)
-					{
-						f = fopen(filename, "rb");
-					}
-					else
-					{
-						f = fopen(filename, "r");
-					}
-
-					if (f != NULL)
-					{
-						status_code |= file_processor(f, filename, settings);
-
-						fclose(f);
-					}
-					else
-					{
-						perror(filename);
-						status_code = 1;
-					}
+					f = fopen(filename, "rb");
 				}
 				else
 				{
-					errno = EISDIR;
+					f = fopen(filename, "r");
+				}
+
+				if (f != NULL)
+				{
+					status_code |= file_processor(f, filename, settings);
+
+					fclose(f);
+				}
+				else
+				{
 					perror(filename);
 					status_code = 1;
 				}
 			}
 			else
 			{
+				errno = EISDIR;
 				perror(filename);
 				status_code = 1;
 			}
+		}
+		else
+		{
+			perror(filename);
+			status_code = 1;
 		}
 	}
 	return status_code;
