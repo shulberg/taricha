@@ -20,6 +20,6 @@ int print_hash(FILE *stream, const char *filename,
 		struct program_settings *settings);
 
 int process_files(char **files, int file_count,
-		int (*file_processor) (FILE *stream, const char *filename, 
+		int (*file_processor) (FILE *stream, const char *filename,
 			struct program_settings *settings),
 		struct program_settings *settings);

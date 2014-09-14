@@ -93,9 +93,9 @@ static int parse_checksum_line(char *line, char **filename, uint8_t *hash,
 
 	char pattern[64];
 
-	sprintf(pattern, "^([A-Za-z0-9]{%zu})\\s+(\\*)?(\\S.*)$", 
+	sprintf(pattern, "^([A-Za-z0-9]{%zu})\\s+(\\*)?(\\S.*)$",
 			settings->hash_len*2);
-	
+
 	regcomp(&checksum_expression, pattern, REG_EXTENDED);
 
 	if (regexec(&checksum_expression, line, 4, matches, 0) == 0)
@@ -158,7 +158,7 @@ int check_files(FILE *stream, const char *checkfile_name,
 	uint64_t bad_line_count = 0;
 
 	char *filename;
-	
+
 	int status_code = 0;
 
 	while ((len = read_line(stream, &line)) > 0)
@@ -188,7 +188,7 @@ int check_files(FILE *stream, const char *checkfile_name,
 			{
 				status_code = 1;
 				bad_checksum_count++;
-				
+
 				if (!settings->status)
 				{
 					printf("%s: FAILED\n", filename);
@@ -228,7 +228,7 @@ int check_files(FILE *stream, const char *checkfile_name,
 }
 
 int process_files(char **files, int file_count,
-		int (*file_processor) (FILE *stream, const char *filename, 
+		int (*file_processor) (FILE *stream, const char *filename,
 			struct program_settings *settings),
 		struct program_settings *settings)
 {

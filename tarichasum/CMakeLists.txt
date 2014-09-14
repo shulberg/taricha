@@ -1,5 +1,5 @@
 add_library(tarichasum STATIC taricha_hash_stream.c tarichasum.c options.c processing.c
-   	                          taricha_hash_stream.h tarichasum.h options.h processing.h)
+                              taricha_hash_stream.h tarichasum.h options.h processing.h)
 
 add_executable(taricha512sum taricha512sum.c)
 add_executable(taricha2_512sum taricha2_512sum.c)

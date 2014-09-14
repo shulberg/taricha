@@ -193,7 +193,7 @@ uint64_t taricha512_64_finalize(struct taricha512_state *s)
 	}
 
 	taricha512_transform(x);
-	
+
 	return s->s[0] ^ x[0];
 }
 

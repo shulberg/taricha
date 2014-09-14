@@ -9,10 +9,10 @@ struct option_state
 {
 	int optpos;
 	int grppos;
-	
+
 	int argc;
 	char **argv;
-	
+
 	const struct option *options;
 	int option_count;
 };
