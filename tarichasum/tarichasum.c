@@ -110,7 +110,7 @@ int tarichasum_main(int argc, char **argv,
 	char **files = argv + optstate.optpos;
 	if (file_count == 0)
 	{
-		const char *stdin_key = "-";
+		char *stdin_key = "-";
 		files = &stdin_key;
 		file_count = 1;
 	}
