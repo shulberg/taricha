@@ -43,7 +43,8 @@ char * file_search(struct file_search_state *state)
 	}
 	if (state->find_handle == NULL)
 	{
-		if ((state->find_handle = FindFirstFile(state->filename, &state->find_data)) == NULL)
+		if ((state->find_handle =
+					FindFirstFile(state->filename, &state->find_data)) == NULL)
 		{
 			state->end_of_files = 1;
 			return state->filename;
