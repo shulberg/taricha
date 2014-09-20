@@ -70,6 +70,10 @@ int tarichasum_main(int argc, char **argv,
 	struct option_state optstate = option_init(argc, argv, o,
 		sizeof(o)/sizeof(struct option));
 
+	int file_count;
+	char **files;
+	char *stdin_key = "-";
+
 	while ((c = option_parse(&optstate)) != -1)
 	{
 		switch (c)
@@ -106,11 +110,10 @@ int tarichasum_main(int argc, char **argv,
 				break;
 		}
 	}
-	int file_count = argc - optstate.optpos;
-	char **files = argv + optstate.optpos;
+	file_count = argc - optstate.optpos;
+	files = argv + optstate.optpos;
 	if (file_count == 0)
 	{
-		char *stdin_key = "-";
 		files = &stdin_key;
 		file_count = 1;
 	}
