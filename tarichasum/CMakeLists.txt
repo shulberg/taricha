@@ -10,7 +10,8 @@ set(REGEX_INCLUDE_DIRECTORY F:/pcre/include CACHE PATH "Path containing regex.h"
 set(REGEX_LIB F:/pcre/lib/pcreposix.lib CACHE FILEPATH "Regex library")
 
 include_directories(${REGEX_INCLUDE_DIRECTORY})
-target_link_libraries(tarichasum ${REGEX_LIB})
+set(CMAKE_LINK_LIBRARY_SUFFIX "")
+target_link_libraries(tarichasum ${REGEX_LIB} setargv.obj)
 
 endif (WIN32 AND NOT CYGWIN)
 

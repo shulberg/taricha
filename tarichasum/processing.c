@@ -9,67 +9,12 @@
 #include "processing.h"
 
 #ifdef _WIN32
-	#include <Windows.h>
 	#include <io.h>
 	#include <fcntl.h>
 
 	#ifndef S_ISDIR
 		#define S_ISDIR(x) ((x & S_IFDIR) == S_IFDIR)
 	#endif
-
-struct file_search_state
-{
-	char *filename;
-	int end_of_files;
-	HANDLE find_handle;
-	WIN32_FIND_DATA find_data;
-};
-
-struct file_search_state file_search_init(char *filename)
-{
-	struct file_search_state state = {
-		.filename = filename,
-		.end_of_files = 0,
-		.find_handle = NULL
-	};
-	return state;
-}
-
-char * file_search(struct file_search_state *state)
-{
-	if (state->end_of_files)
-	{
-		return NULL;
-	}
-	if (state->find_handle == NULL)
-	{
-		if ((state->find_handle =
-					FindFirstFile(state->filename, &state->find_data)) == NULL)
-		{
-			state->end_of_files = 1;
-			return state->filename;
-		}
-		else
-		{
-			return state->find_data.cFileName;
-		}
-	}
-	else
-	{
-		if (FindNextFile(state->find_handle, &state->find_data))
-		{
-			return state->find_data.cFileName;;
-		}
-		else
-		{
-			FindClose(state->find_handle);
-			state->find_handle = NULL;
-			state->end_of_files = 1;
-			return NULL;
-		}
-	}
-}
-
 #endif
 
 static size_t read_line(FILE * stream, char **line_out)
@@ -324,51 +269,43 @@ int process_files(char **files, int file_count,
 
 			status_code |= file_processor(stdin, "-", settings);
 		}
-		else
+		else if (stat(filename, &file_stat) == 0)
 		{
-#ifdef _WIN32
-			struct file_search_state search_state = file_search_init(filename);
-			while ((filename = file_search(&search_state)) != NULL)
-			if (strcmp(filename, ".") != 0 && strcmp(filename, "..") != 0)
-#endif
-			if (stat(filename, &file_stat) == 0)
+			if (!S_ISDIR(file_stat.st_mode))
 			{
-				if (!S_ISDIR(file_stat.st_mode))
+				FILE *f;
+				if (settings->binary)
 				{
-					FILE *f;
-					if (settings->binary)
-					{
-						f = fopen(filename, "rb");
-					}
-					else
-					{
-						f = fopen(filename, "r");
-					}
-
-					if (f != NULL)
-					{
-						status_code |= file_processor(f, filename, settings);
-
-						fclose(f);
-					}
-					else
-					{
-						perror(filename);
-						status_code = 1;
-					}
+					f = fopen(filename, "rb");
 				}
 				else
 				{
-					errno = EISDIR;
+					f = fopen(filename, "r");
+				}
+
+				if (f != NULL)
+				{
+					status_code |= file_processor(f, filename, settings);
+
+					fclose(f);
+				}
+				else
+				{
 					perror(filename);
 					status_code = 1;
 				}
 			}
 			else
 			{
+				errno = EISDIR;
 				perror(filename);
 				status_code = 1;
 			}
+		}
+		else
+		{
+			perror(filename);
+			status_code = 1;
 		}
 	}
 	return status_code;
