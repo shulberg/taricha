@@ -103,7 +103,7 @@ static inline void taricha2_512_block(const uint8_t in[128],
 
 	for (i=0; i<8; i++)
 	{
-		x[i] = s->s[i] ^ a[i];
+		x[i] = s->s[i] ^ correct_bytes(a[i]);
 	}
 	for (i=8; i<16; i++)
 	{
@@ -172,11 +172,17 @@ void taricha2_512_append(const uint8_t *in, size_t length,
 size_t taricha2_512_finalize(uint8_t *out, size_t length,
 		struct taricha2_512_state *s)
 {
+	int i;
 	memset(s->buffer+(128-s->buffer_free), s->buffer_free, s->buffer_free);
 	taricha2_512_block(s->buffer, s);
 
 	if (length > 128)
 		length = 128;
+
+	for (i=0; i<8; i++)
+	{
+		s->s[i] = correct_bytes(s->s[i]);
+	}
 
 	memcpy(out, s->s, length);
 

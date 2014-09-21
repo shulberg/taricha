@@ -24,6 +24,8 @@ THE SOFTWARE.
 
 #include <stdlib.h>
 #include <string.h>
+#include <inttypes.h>
+#include <stdio.h>
 #include "taricha.h"
 #include "taricha512_common.h"
 
@@ -96,7 +98,7 @@ static inline void taricha512_block(const uint8_t in[64],
 
 	for (i=0; i<8; i++)
 	{
-		x[i] = s->s[i] ^ a[i];
+		x[i] = s->s[i] ^ correct_bytes(a[i]);
 	}
 
 	taricha512_transform(x);
@@ -161,11 +163,17 @@ void taricha512_append(const uint8_t *in, size_t length,
 size_t taricha512_finalize(uint8_t *out, size_t length,
 		struct taricha512_state *s)
 {
+	int i;
 	memset(s->buffer+(64-s->buffer_free), s->buffer_free, s->buffer_free);
 	taricha512_block(s->buffer, s);
 
 	if (length > 64)
 		length = 64;
+
+	for (i=0; i<8; i++)
+	{
+		s->s[i] = correct_bytes(s->s[i]);
+	}
 
 	memcpy(out, s->s, length);
 

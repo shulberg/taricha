@@ -9,6 +9,21 @@ static inline uint64_t rotl64(uint64_t x, uint8_t r)
 	return (x<<r) | (x>>(64-r));
 }
 
+static inline uint64_t correct_bytes(uint64_t x)
+{
+#ifdef BIG_ENDIAN
+	x = (x >> 56) & 0x00000000000000FF |
+		(x >> 40) & 0x000000000000FF00 |
+		(x >> 24) & 0x0000000000FF0000 |
+		(x >>  8) & 0x00000000FF000000 |
+		(x <<  8) & 0x000000FF00000000 |
+		(x << 24) & 0x0000FF0000000000 |
+		(x << 40) & 0x00FF000000000000 |
+		(x << 56) & 0xFF00000000000000 ;
+#endif
+	return x;
+}
+
 static inline void mix512x(uint64_t y[8],
 		uint64_t x0, uint64_t x1, uint64_t x2, uint64_t x3,
 		uint64_t x4, uint64_t x5, uint64_t x6, uint64_t x7,
