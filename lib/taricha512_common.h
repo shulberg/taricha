@@ -11,7 +11,7 @@ static inline uint64_t rotl64(uint64_t x, uint8_t r)
 
 static inline uint64_t correct_bytes(uint64_t x)
 {
-#ifdef BIG_ENDIAN
+#ifdef TARICHA_BIG_ENDIAN
 	x = (x >> 56) & 0x00000000000000FF |
 		(x >> 40) & 0x000000000000FF00 |
 		(x >> 24) & 0x0000000000FF0000 |
