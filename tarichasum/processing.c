@@ -85,7 +85,7 @@ int print_hash(FILE *stream, const char *filename,
 static void parse_hash(const char *hex_hash, uint8_t *hash,
 		unsigned int hash_len)
 {
-	int i = 0;
+	unsigned int i = 0;
 	do
 	{
 		sscanf(hex_hash, "%02"SCNx8, hash+i);
