@@ -4,7 +4,8 @@
 
 #define BUFFER_SIZE 8192
 
-size_t taricha512_hash_stream(FILE *stream, uint8_t *out, size_t out_length)
+unsigned int taricha512_hash_stream(FILE *stream, uint8_t *out,
+		unsigned int out_length)
 {
 	uint8_t buffer[BUFFER_SIZE];
 	size_t bytes_read;
@@ -16,10 +17,11 @@ size_t taricha512_hash_stream(FILE *stream, uint8_t *out, size_t out_length)
 	}
 	while (!feof(stream));
 
-	return taricha512_finalize(out, out_length, &s);
+	return (unsigned int)taricha512_finalize(out, out_length, &s);
 }
 
-size_t taricha2_512_hash_stream(FILE *stream, uint8_t *out, size_t out_length)
+unsigned int taricha2_512_hash_stream(FILE *stream, uint8_t *out,
+		unsigned int out_length)
 {
 	uint8_t buffer[BUFFER_SIZE];
 	size_t bytes_read;
@@ -31,6 +33,6 @@ size_t taricha2_512_hash_stream(FILE *stream, uint8_t *out, size_t out_length)
 	}
 	while (!feof(stream));
 
-	return taricha2_512_finalize(out, out_length, &s);
+	return (unsigned int)taricha2_512_finalize(out, out_length, &s);
 }
 

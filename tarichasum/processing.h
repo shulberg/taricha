@@ -7,10 +7,11 @@ struct program_settings {
 	int warn;
 	int status;
 
-	char *hash_name;
-	size_t hash_len;
+	const char *hash_name;
+	unsigned int hash_len;
 
-	size_t (*hash_stream)(FILE *stream, uint8_t *out, size_t out_length);
+	unsigned int (*hash_stream)(FILE *stream, uint8_t *out,
+			unsigned int out_length);
 };
 
 int check_files(FILE *stream, const char *checkfile_name,

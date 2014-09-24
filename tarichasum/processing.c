@@ -58,8 +58,8 @@ int print_hash(FILE *stream, const char *filename,
 		struct program_settings *settings)
 {
 	uint8_t hash[64];
-	size_t hash_len;
-	int i;
+	unsigned int hash_len;
+	unsigned int i;
 
 	hash_len = settings->hash_stream(stream, hash, sizeof(hash));
 
@@ -82,7 +82,8 @@ int print_hash(FILE *stream, const char *filename,
 	return 0;
 }
 
-static void parse_hash(const char *hex_hash, uint8_t *hash, size_t hash_len)
+static void parse_hash(const char *hex_hash, uint8_t *hash,
+		unsigned int hash_len)
 {
 	int i = 0;
 	do
@@ -102,7 +103,7 @@ static int parse_checksum_line(char *line, char **filename, uint8_t *hash,
 
 	char pattern[64];
 
-	sprintf(pattern, "^([A-Za-z0-9]{%zu})\\s+(\\*)?(\\S.*)$",
+	sprintf(pattern, "^([A-Za-z0-9]{%u})\\s+(\\*)?(\\S.*)$",
 			settings->hash_len*2);
 
 	regcomp(&checksum_expression, pattern, REG_EXTENDED);
@@ -127,7 +128,7 @@ static int parse_checksum_line(char *line, char **filename, uint8_t *hash,
 	{
 		regfree(&checksum_expression);
 
-		sprintf(pattern, "^%s\\s+\\((.+)\\)\\s+=\\s+([0-9A-Fa-f]{%zu})$",
+		sprintf(pattern, "^%s\\s+\\((.+)\\)\\s+=\\s+([0-9A-Fa-f]{%u})$",
 				settings->hash_name, settings->hash_len*2);
 
 		regcomp(&checksum_expression, pattern, REG_EXTENDED);

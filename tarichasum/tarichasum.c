@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "options.h"
 #include "processing.h"
+#include "tarichasum.h"
 
 const char *HELP_TEXT =
 "Usage: %s [OPTIONS] [--] [FILES]\n"
@@ -37,8 +38,9 @@ const char *VERSION_TEXT =
 ;
 
 int tarichasum_main(int argc, char **argv,
-	size_t (*hash_stream)(FILE *stream, uint8_t *out, size_t out_length),
-	char *hash_name, size_t hash_len, char *program_name)
+	unsigned int (*hash_stream)(FILE *stream, uint8_t *out, 
+	   unsigned int out_length),
+	const char *hash_name, unsigned int hash_len, const char *program_name)
 {
 	int c;
 	struct option o[] = {

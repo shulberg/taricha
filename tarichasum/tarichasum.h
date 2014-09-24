@@ -1,5 +1,6 @@
 #include <stdio.h>
 
 int tarichasum_main(int argc, char **argv,
-	size_t (*hash_stream)(FILE *stream, uint8_t *out, size_t out_length),
-	char *hash_name, size_t hash_len, char *program_name);
+	unsigned int (*hash_stream)(FILE *stream, uint8_t *out,
+		unsigned int out_length),
+	const char *hash_name, unsigned int hash_len, const char *program_name);
