@@ -103,7 +103,7 @@ static int parse_checksum_line(char *line, char **filename, uint8_t *hash,
 
 	char pattern[64];
 
-	sprintf(pattern, "^([A-Za-z0-9]{%u})\\s+(\\*)?(\\S.*)$",
+	sprintf(pattern, "^([A-Za-z0-9]{%u}) (\\*| )(.*)$",
 			settings->hash_len*2);
 
 	regcomp(&checksum_expression, pattern, REG_EXTENDED);
@@ -128,7 +128,7 @@ static int parse_checksum_line(char *line, char **filename, uint8_t *hash,
 	{
 		regfree(&checksum_expression);
 
-		sprintf(pattern, "^%s\\s+\\((.+)\\)\\s+=\\s+([0-9A-Fa-f]{%u})$",
+		sprintf(pattern, "^%s \\((.*)\\) = ([0-9A-Fa-f]{%u})$",
 				settings->hash_name, settings->hash_len*2);
 
 		regcomp(&checksum_expression, pattern, REG_EXTENDED);
